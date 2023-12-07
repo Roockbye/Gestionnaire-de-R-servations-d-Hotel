@@ -1,28 +1,27 @@
 [
   {
     "number": 1,
+    "type": "simple",
+    "price": 50
+  },
+  {
+    "number": 1,
+    "type": "simple",
+    "price": 50
+  },
+  {
+    "number": 1,
+    "type": "simple",
+    "price": 50
+  },
+  {
+    "number": 1,
+    "type": "simple",
+    "price": 50
+  },
+  {
+    "number": "2",
     "type": "double",
-    "price": 50,
-    "prix_nuit": 70
-  },
-  {
-    "number": 1,
-    "type": "simple",
-    "price": 50
-  },
-  {
-    "number": 1,
-    "type": "simple",
-    "price": 50
-  },
-  {
-    "number": 1,
-    "type": "simple",
-    "price": 50
-  },
-  {
-    "number": 1,
-    "type": "simple",
-    "price": 50
+    "price": "75"
   }
 ]

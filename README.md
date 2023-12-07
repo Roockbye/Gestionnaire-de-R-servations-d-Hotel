@@ -41,7 +41,7 @@ Technologies used in the project:
 
 <h2>🍰 Contribution Guidelines:</h2>
 
-https://frederic-lang.developpez.com/tutoriels/python/python-de-zero/?page=les-debuts-de-la-programmation https://realpython.com/python-json/
+https://frederic-lang.developpez.com/tutoriels/python/python-de-zero/?page=les-debuts-de-la-programmation https://realpython.com/python-json/ https://docs.python.org/3/library/index.html
 
   
 <h2>💖Like my work?</h2>

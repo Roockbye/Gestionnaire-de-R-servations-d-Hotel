@@ -37,9 +37,13 @@ class InterfaceUtilisateur:
             print("3. Add a new client") #ok
             print("4. Update a client info") #ok
             print("5. Delete a client") #ok
-            print("6. Make a reservation") #no
-            print("7. Save a payment") #no
-            print("8. Export the reservations") #no
+            print("6. Add a new chamber") #ok
+            print("7. Update a chamber") #ok
+            print("8. Delete a chamber") #ok
+            print("9. Make a reservation") #ok
+            print("10. Save a payment") #ok mais show id dans diplay res
+            print("11. Export the reservations") #no
+            print("12. Display reservations") #ok mais et perdu apres avoir quitté faire un json
             print("0. Quit")
 
             choice = input("Select an option: ")
@@ -57,11 +61,19 @@ class InterfaceUtilisateur:
                 case "5":
                     self.clients.delete_client()
                 case "6":
-                    self.reservations.make_reservations()
+                    self.chambers.add_chamber()
                 case "7":
-                    self.reservations.payment
+                    self.chambers.update_chamber()
                 case "8":
+                    self.chambers.delete_chamber()
+                case "9":
+                    self.reservations.make_reservation()
+                case "10":
+                    self.reservations.payment()
+                case "11":
                     self.reservations.export_reservations()
+                case "12":
+                    self.reservations.display_reservations()
                 case _:
                     print("Invalid option. Select a valid option.")
 

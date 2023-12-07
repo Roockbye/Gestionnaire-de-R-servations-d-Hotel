@@ -52,3 +52,24 @@ class Chambers:
     def display_chambers(self):
         for chamber in self.chambers:
             print(f"Numéro: {chamber['number']}, Type: {chamber['type']}, Prix par nuit: {chamber['price']}")
+
+## affichage main
+
+    def add_chamber(self):
+        number = input("Enter the chamber number: ")
+        type = input("Enter the chamber type(simple, double, suite): ")
+        price = input("Enter the price per night: ")
+        
+        self.add_chambers(number, type, price)
+        
+    def delete_chamber(self):
+        number = int(input("Enter the chamber number to delete: "))
+        self.delete_chambers(number)
+        
+    def update_chamber(self):
+        number = int(input("Enter the chamber number to update: "))
+        update_data = {
+            'type': input("Enter the new type: "),
+            'price': input("Enter the new price: "),
+        }
+        self.update_chambers(number, update_data)
