@@ -1,8 +1,24 @@
 from datetime import datetime
 import json
 
-
 class Clients:
+    """
+    A class to manage client information.
+
+    Attributes:
+    - clients (list): A list to store client information.
+
+    Methods:
+    - __init__: Initializes the Clients class and loads client information from a file.
+    - add_clients: Adds a new client to the list and saves the updated information to a file.
+    - delete_clients: Deletes a client from the list and saves the updated information to a file.
+    - update_clients: Updates a client's information and saves the updated information to a file.
+    - info_clients: Loads or saves client information to a file.
+    - display_clients: Displays all clients in the list.
+    - add_client: Interface method to add a new client.
+    - delete_client: Interface method to delete a client.
+    - update_client: Interface method to update a client's information.
+    """
     def __init__(self):
         self.clients = []
         self.clients = self.info_clients(action='load')
@@ -19,32 +35,32 @@ class Clients:
         }
         self.clients.append(new_client)
         self.info_clients(action='save', data=self.clients)
-        print(f"Un nouveau client à été créé: client {client_id}")
+        print(f"A new client has been created: client {client_id}")
         
         
     def delete_clients(self, client_id):
         client_id = int(client_id)
         for client in self.clients:
-            if client['id'] == client_id:
+            if client['client_id'] == client_id:
                 self.clients.remove(client)
                 self.info_clients(action='save', data=self.clients)
-                print(f"Le client {client_id} à été supprimé:")
+                print(f"The client {client_id} has been deleted")
                 return
             
-        print(f"Client {client_id} non trouvé")
+        print(f"Client {client_id} not found")
         
     def update_clients(self, client_id, update_data):
         client_id = int(client_id)
         for client in self.clients:
-            client_id_in_dict = client.get('client_id')
-            if client_id_in_dict is not None and client_id_in_dict == client_id:
-            #if client['id'] == client_id:
-                client.update(update_data)
+            if client['client_id'] == client_id:
+                for key, value in update_data.items():
+                    if value != '':
+                        client[key] = value
                 self.info_clients(action='save', data=self.clients)
-                print(f"Données du client {client_id} mis à jour")
+                print(f"Data of the client {client_id} updated")
                 return
             
-        print(f"Client {client_id} non trouvé")
+        print(f"Client {client_id} not found")
         
 
     def info_clients(self, action='load', data=None):
@@ -66,7 +82,7 @@ class Clients:
         for client in self.clients:
             print(client)
             
-##pour affiche main
+## Display on the Interface(main)
 
     def add_client(self):
         firstname = input("Enter the first name: ")

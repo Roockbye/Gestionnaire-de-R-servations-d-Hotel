@@ -3,6 +3,14 @@ from Chambers import Chambers
 from Reservations import Reservations
 
 class InterfaceUtilisateur:
+    """
+    A class to represent the user interface for the Millenium Hostel management system.
+
+    Attributes:
+    clients (Clients): An instance of the Clients class.
+    chambers (Chambers): An instance of the Chambers class.
+    reservations (Reservations): An instance of the Reservations class.
+    """
     def __init__(self):
         self.clients = Clients()
         self.chambers = Chambers()
@@ -32,19 +40,19 @@ class InterfaceUtilisateur:
     
         while True:
             print("\nEmployee menu:")
-            print("1. Display the clients list") #ok
-            print("2. Display the chambers list") #ok
-            print("3. Display reservations") #ok 
-            print("4. Add a new client") #ok
-            print("5. Update a client info") #ok
-            print("6. Delete a client") #ok
-            print("7. Add a new chamber") #ok
-            print("8. Update a chamber") #ok
-            print("9. Delete a chamber") #ok
-            print("10. Make a reservation") #ok
-            print("11. Save a payment") #ok
-            print("12. Delete a reservation")#ok
-            print("13. Export the reservations") #ok
+            print("1. Display the clients list") #OK
+            print("2. Display the chambers list") #OK
+            print("3. Display reservations") #OK
+            print("4. Add a new client") #OK
+            print("5. Update a client info") #OK
+            print("6. Delete a client") #OK
+            print("7. Add a new chamber") #OK
+            print("8. Update a chamber") #OK
+            print("9. Delete a chamber") #OK
+            print("10. Make a reservation") #OK
+            print("11. Save a payment") #OK
+            print("12. Delete a reservation")#OK
+            print("13. Export the reservations") #OK
             print("0. Quit")
 
             choice = input("Select an option: ")
@@ -84,7 +92,7 @@ class InterfaceUtilisateur:
         
         while True:
             print("\nVisitor menu:")
-            print("1. Display the list of chambers available") #no
+            print("1. Display the list of chambers available") #NO
             print("0. Quit")
 
             choice = input("Select an option: ")

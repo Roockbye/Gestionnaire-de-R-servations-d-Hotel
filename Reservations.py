@@ -1,11 +1,35 @@
 from datetime import datetime
 import csv
 import json
+from Chambers import Chambers
 
 class Reservations:
+    """
+    A class to manage reservations in a hotel.
+
+    Attributes:
+    - reservations: a list to store reservation information.
+    - chambers: an instance of the Chambers class.
+
+    Methods:
+    - __init__: initializes the Reservations class, loads reservation data from a file, and initializes the Chambers class.
+    - make_reservations: creates a new reservation and saves the data to a file.
+    - save_payment: saves the payment information for a reservation.
+    - show_availability: checks the availability of chambers for a given time period.
+    - export: exports reservation information to a CSV file.
+    - delete_reservations: deletes a reservation from the list and updates the file.
+    - info_reservations: loads or saves reservation data from/to a JSON file.
+    - make_reservation: provides an interface to make a new reservation.
+    - payment: provides an interface to save payment for a reservation.
+    - export_reservations: provides an interface to export reservation information to a CSV file.
+    - show_chambers: displays available chambers for a specified time period.
+    - display_reservations: displays the details of all reservations.
+    - delete_reservation: provides an interface to delete a reservation.
+    """
     def __init__(self):
         self.reservations = []
         self.reservations = self.info_reservations(action='load')
+        self.chambers = Chambers()
     
     def make_reservations(self, client_id, number,starttime, endtime, payment=False):
         reservation_id = len(self.reservations)+1
@@ -21,29 +45,36 @@ class Reservations:
             'payment': False
         }
         if not self.show_availability(number, starttime, endtime):
-            print("Chambre non disponible")
+            print("Chamber not available")
             return
         self.reservations.append(new_reservation)
         self.info_reservations(action='save', data= self.reservations)
-        print(f"La reservation a été crée avec l'ID: {reservation_id}")      
+        print(f"The reservation has been created with the ID: {reservation_id}")      
         
     def save_payment(self, reservation_id):
         for reservation in self.reservations:
             if reservation['id']== reservation_id:
                 reservation['payment'] = True
                 self.info_reservations(action='save', data=self.reservations)
-                print(f"Paiement enregistré pour {reservation_id}")
+                print(f"Payment not save for {reservation_id}")
                 return
             print(f"Reservation {reservation_id} not found")
         
-    def show_availability(self, number, starttime, endtime):
+    def show_availability(self, number, starttime_str, endtime_str):
+        starttime = datetime.strptime(starttime_str, '%Y-%m-%d').date()
+        endtime = datetime.strptime(endtime_str, '%Y-%m-%d').date()
+        
+        reserved_chambers = set()
         for reservation in self.reservations:
-            if reservation['number']==number:
+            if reservation['number'] != number:
                 reservation_start = datetime.strptime(reservation['starttime'], '%Y-%m-%d').date()
                 reservation_end = datetime.strptime(reservation['endtime'], '%Y-%m-%d').date()
-                if starttime < reservation_end and endtime > reservation_start:
-                    return False
-        return True
+                if starttime <= reservation_end and endtime >= reservation_start:
+                    reserved_chambers.add(reservation['number'])
+                
+        available_chambers = [chamber for chamber in self.chambers.list_chambers() if chamber['number'] not in reserved_chambers]
+        return available_chambers
+
         
     def export(self, reservation_id, filename='reservations.csv'):
         
@@ -84,7 +115,7 @@ class Reservations:
             with open(filename, 'w') as file:
                 json.dump(data, file, indent=2)
 
-## affiche interface
+## Display Interface(main)
 
     def make_reservation(self):
         client_id = int(input("Enter the client ID: "))
@@ -99,23 +130,27 @@ class Reservations:
         self.save_payment(reservation_id)
     
     def export_reservations(self):
-        reservation_id_to_export = int(input("Entrez l'ID de la réservation à exporter: "))
-        filename = input("Entrez le nom du fichier pour l'export (par défaut: reservations.csv): ") or "reservations.csv"
+        reservation_id_to_export = int(input("Enter the ID of the reservation to export: "))
+        filename = input("Enter the name of the file to export(by default: reservations.csv): ") or "reservations.csv"
         self.export(reservation_id_to_export, filename)
     
     def show_chambers(self):
-        number = int(input("Enter the chamber number: "))
-        starttime = input("Enter the start time (YYYY-MM-DD): ")
-        endtime = input("Enter the end time (YYYY-MM-DD): ")
+        starttime_str = input("Enter the start date (YYYY-MM-DD): ")
+        endtime_str = input("Enter the end date (YYYY-MM-DD): ")
 
-        available = self.show_availability(number, starttime, endtime)
-        print("Chamber is available" if available else "Chamber is not available")
+        available_chambers = [chamber for chamber in self.chambers.list_chambers() if self.show_availability(chamber['number'], starttime_str, endtime_str)]
+        if not available_chambers:
+            print("No available chambers for the specified dates")
+        else:
+            print("Available Chambers:")
+            for chamber in available_chambers:
+                print(f"Chamber {chamber['number']}, {chamber['type']}, Price: {chamber['price']}")
     
     def display_reservations(self):
-        print("Liste des réservations:")
+        print("List of reservations:")
         for reservation in self.reservations:
             print(reservation)
                 
     def delete_reservation(self):
-        reservation_id = int(input("Entrez l'ID de la reservation à supprimer: "))
+        reservation_id = int(input("Enter the ID of the reservation to delete: "))
         self.delete_reservations(reservation_id)
