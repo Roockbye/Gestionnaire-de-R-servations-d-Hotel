@@ -18,24 +18,23 @@ class Reservations:
             'number': number,
             'starttime':starttime.strftime('%Y-%m-%d'),
             'endtime': endtime.strftime('%Y-%m-%d'),
-            'payment': payment
+            'payment': False
         }
         if not self.show_availability(number, starttime, endtime):
             print("Chambre non disponible")
             return
         self.reservations.append(new_reservation)
         self.info_reservations(action='save', data= self.reservations)
-        print(f"La reservation a été crée avec l'ID: {reservation_id}")
-        
+        print(f"La reservation a été crée avec l'ID: {reservation_id}")      
         
     def save_payment(self, reservation_id):
         for reservation in self.reservations:
             if reservation['id']== reservation_id:
                 reservation['payment'] = True
+                self.info_reservations(action='save', data=self.reservations)
                 print(f"Paiement enregistré pour {reservation_id}")
                 return
-            print("Paiement non accepté")
-        
+            print(f"Reservation {reservation_id} not found")
         
     def show_availability(self, number, starttime, endtime):
         for reservation in self.reservations:
@@ -46,22 +45,30 @@ class Reservations:
                     return False
         return True
         
-    def export(self, starttime, endtime, filename='reservations.csv'):
-        starttime = datetime.strptime(starttime, '%Y-%m-%d').date()
-        endtime = datetime.strptime(endtime, '%Y-%m-%d').date()
+    def export(self, reservation_id, filename='reservations.csv'):
+        
         with open(filename, 'w', newline='') as csvfile:
             fieldnames = ['id', 'client_id', 'number', 'starttime', 'endtime', 'payment']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
-            for reservation in self.reservations:
-                reservation_start = datetime.strptime(reservation['starttime'], '%Y-%m-%d').date()
-                reservation_end = datetime.strptime(reservation['endtime'], '%Y-%m-%d').date()
+            
+            reservation = next((r for r in self.reservations if r['id'] == reservation_id), None)
+            if reservation:
+                writer.writerow(reservation)
+                print(f"Reervation with the ID {reservation_id} export to {filename}")
+            else:
+                print(f"Reservation with the ID {reservation_id} not found")
                 
-                if starttime <= reservation_start <= endtime or starttime <= reservation_end <= endtime:
-                    writer.writerow(reservation)
-
-        print(f"Réservations exportées vers {filename} pour la période du {starttime} au {endtime}")
-        
+    def delete_reservations(self, reservation_id):
+        reservation = next((r for r in self.reservations if r ['id']==reservation_id), None)
+        if reservation:
+            self.reservations.remove(reservation)
+            self.info_reservations(action='save', data = self.reservations)
+            print(f"Reservation with ID {reservation_id} deleted")
+        else:
+            print(f"Reservation with ID {reservation_id} not found")
+            
+                
     def info_reservations(self, action='load', data=None):
         filename = 'reservation.json'
         if action == 'load':
@@ -76,7 +83,7 @@ class Reservations:
         elif action == 'save':
             with open(filename, 'w') as file:
                 json.dump(data, file, indent=2)
-                
+
 ## affiche interface
 
     def make_reservation(self):
@@ -90,14 +97,12 @@ class Reservations:
     def payment(self):
         reservation_id = int(input("Enter the reservation ID to save payment: "))
         self.save_payment(reservation_id)
-
+    
     def export_reservations(self):
-        starttime = input("Enter the start time (YYYY-MM-DD): ")
-        endtime = input("Enter the end time (YYYY-MM-DD): ")
-        filename = input("Enter the filename for export (default: reservations.csv): ") or "reservations.csv"
-
-        self.export(starttime, endtime, filename)
-
+        reservation_id_to_export = int(input("Entrez l'ID de la réservation à exporter: "))
+        filename = input("Entrez le nom du fichier pour l'export (par défaut: reservations.csv): ") or "reservations.csv"
+        self.export(reservation_id_to_export, filename)
+    
     def show_chambers(self):
         number = int(input("Enter the chamber number: "))
         starttime = input("Enter the start time (YYYY-MM-DD): ")
@@ -105,13 +110,12 @@ class Reservations:
 
         available = self.show_availability(number, starttime, endtime)
         print("Chamber is available" if available else "Chamber is not available")
-        
+    
     def display_reservations(self):
         print("Liste des réservations:")
         for reservation in self.reservations:
-            reservation_id = reservation['id']
-            client_id = reservation['client_id']
-            number = reservation['number']
-            starttime = datetime.strptime(reservation['starttime'], '%Y-%m-%d').date()
-            endtime = datetime.strptime(reservation['endtime'], '%Y-%m-%d').date()
-            print(f"Reservation {reservation_id} : Client {client_id} a réservé chambre {number} du {starttime} au {endtime}")
+            print(reservation)
+                
+    def delete_reservation(self):
+        reservation_id = int(input("Entrez l'ID de la reservation à supprimer: "))
+        self.delete_reservations(reservation_id)

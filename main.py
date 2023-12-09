@@ -34,16 +34,17 @@ class InterfaceUtilisateur:
             print("\nEmployee menu:")
             print("1. Display the clients list") #ok
             print("2. Display the chambers list") #ok
-            print("3. Add a new client") #ok
-            print("4. Update a client info") #ok
-            print("5. Delete a client") #ok
-            print("6. Add a new chamber") #ok
-            print("7. Update a chamber") #ok
-            print("8. Delete a chamber") #ok
-            print("9. Make a reservation") #ok
-            print("10. Save a payment") #ok mais show id dans diplay res
-            print("11. Export the reservations") #no
-            print("12. Display reservations") #ok mais et perdu apres avoir quitté faire un json
+            print("3. Display reservations") #ok 
+            print("4. Add a new client") #ok
+            print("5. Update a client info") #ok
+            print("6. Delete a client") #ok
+            print("7. Add a new chamber") #ok
+            print("8. Update a chamber") #ok
+            print("9. Delete a chamber") #ok
+            print("10. Make a reservation") #ok
+            print("11. Save a payment") #ok
+            print("12. Delete a reservation")#ok
+            print("13. Export the reservations") #ok
             print("0. Quit")
 
             choice = input("Select an option: ")
@@ -55,25 +56,27 @@ class InterfaceUtilisateur:
                 case "2":
                     self.chambers.display_chambers()
                 case "3":
-                    self.clients.add_client()
-                case "4":
-                    self.clients.update_client()
-                case "5":
-                    self.clients.delete_client()
-                case "6":
-                    self.chambers.add_chamber()
-                case "7":
-                    self.chambers.update_chamber()
-                case "8":
-                    self.chambers.delete_chamber()
-                case "9":
-                    self.reservations.make_reservation()
-                case "10":
-                    self.reservations.payment()
-                case "11":
-                    self.reservations.export_reservations()
-                case "12":
                     self.reservations.display_reservations()
+                case "4":
+                    self.clients.add_client()
+                case "5":
+                    self.clients.update_client()
+                case "6":
+                    self.clients.delete_client()
+                case "7":
+                    self.chambers.add_chamber()
+                case "8":
+                    self.chambers.update_chamber()
+                case "9":
+                    self.chambers.delete_chamber()
+                case "10":
+                    self.reservations.make_reservation()
+                case "11":
+                    self.reservations.payment()
+                case "12":
+                    self.reservations.delete_reservation()
+                case "13":
+                    self.reservations.export_reservations()
                 case _:
                     print("Invalid option. Select a valid option.")
 
