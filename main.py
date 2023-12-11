@@ -92,7 +92,7 @@ class InterfaceUtilisateur:
         
         while True:
             print("\nVisitor menu:")
-            print("1. Display the list of chambers available") #NO
+            print("1. Display the list of chambers available") #pas entierement fonctionnel
             print("0. Quit")
 
             choice = input("Select an option: ")

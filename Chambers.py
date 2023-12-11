@@ -2,7 +2,7 @@ import json
 
 class Chambers:
     """
-    A class to manage chambers in a hotel.
+    A class to manage chambers in a hostel.
 
     Attributes:
     - chambers: a list to store chamber information.
@@ -14,7 +14,7 @@ class Chambers:
     - update_chambers: updates the information of a chamber and saves the changes to the file.
     - info_chambers: loads or saves chamber data from/to a JSON file.
     - display_chambers: displays the details of all chambers.
-    - list_chambers: returns a list of chamber details.
+    - list_chambers: returns a list of chamber details(to how the chambers available).
     - add_chamber: provides an interface to add a new chamber.
     - delete_chamber: provides an interface to delete a chamber.
     - update_chamber: provides an interface to update chamber information.

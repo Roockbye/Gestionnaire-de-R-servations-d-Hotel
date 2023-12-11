@@ -85,6 +85,7 @@ class Clients:
 ## Display on the Interface(main)
 
     def add_client(self):
+        print("Hello !")
         firstname = input("Enter the first name: ")
         lastname = input("Enter the last name: ")
         birthdate = input("Enter the birthdate (YYYY-MM-DD): ")
@@ -95,6 +96,7 @@ class Clients:
     def delete_client(self):
         client_id = int(input("Enter the client ID to delete: "))
         self.delete_clients(client_id)
+        print("Bye bye")
 
     def update_client(self):
         client_id = int(input("Enter the client ID to update: "))

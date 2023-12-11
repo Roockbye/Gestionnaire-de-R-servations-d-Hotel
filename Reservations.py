@@ -5,7 +5,7 @@ from Chambers import Chambers
 
 class Reservations:
     """
-    A class to manage reservations in a hotel.
+    A class to manage reservations in a hostel.
 
     Attributes:
     - reservations: a list to store reservation information.
@@ -33,7 +33,7 @@ class Reservations:
     
     def make_reservations(self, client_id, number,starttime, endtime, payment=False):
         reservation_id = len(self.reservations)+1
-        starttime = datetime.strptime(starttime, '%Y-%m-%d').date()
+        starttime = datetime.strptime(starttime, '%Y-%m-%d').date() ## attention ne pas utiliser strftime ici
         endtime = datetime.strptime(endtime, '%Y-%m-%d').date()
         
         new_reservation = {
@@ -60,20 +60,14 @@ class Reservations:
                 return
             print(f"Reservation {reservation_id} not found")
         
-    def show_availability(self, number, starttime_str, endtime_str):
-        starttime = datetime.strptime(starttime_str, '%Y-%m-%d').date()
-        endtime = datetime.strptime(endtime_str, '%Y-%m-%d').date()
-        
-        reserved_chambers = set()
+    def show_availability(self, number, starttime, endtime):
         for reservation in self.reservations:
-            if reservation['number'] != number:
+            if reservation['number']==number:
                 reservation_start = datetime.strptime(reservation['starttime'], '%Y-%m-%d').date()
                 reservation_end = datetime.strptime(reservation['endtime'], '%Y-%m-%d').date()
-                if starttime <= reservation_end and endtime >= reservation_start:
-                    reserved_chambers.add(reservation['number'])
-                
-        available_chambers = [chamber for chamber in self.chambers.list_chambers() if chamber['number'] not in reserved_chambers]
-        return available_chambers
+                if starttime < reservation_end and endtime > reservation_start:
+                    return False
+        return True
 
         
     def export(self, reservation_id, filename='reservations.csv'):
@@ -86,12 +80,12 @@ class Reservations:
             reservation = next((r for r in self.reservations if r['id'] == reservation_id), None)
             if reservation:
                 writer.writerow(reservation)
-                print(f"Reervation with the ID {reservation_id} export to {filename}")
+                print(f"Reservation with the ID {reservation_id} export to {filename}")
             else:
                 print(f"Reservation with the ID {reservation_id} not found")
                 
     def delete_reservations(self, reservation_id):
-        reservation = next((r for r in self.reservations if r ['id']==reservation_id), None)
+        reservation = next((r for r in self.reservations if r ['id']== reservation_id), None)
         if reservation:
             self.reservations.remove(reservation)
             self.info_reservations(action='save', data = self.reservations)
@@ -118,6 +112,7 @@ class Reservations:
 ## Display Interface(main)
 
     def make_reservation(self):
+        print("Hello ! ")
         client_id = int(input("Enter the client ID: "))
         number = int(input("Enter the chamber number: "))
         starttime = input("Enter the start time (YYYY-MM-DD): ")
@@ -135,10 +130,10 @@ class Reservations:
         self.export(reservation_id_to_export, filename)
     
     def show_chambers(self):
-        starttime_str = input("Enter the start date (YYYY-MM-DD): ")
-        endtime_str = input("Enter the end date (YYYY-MM-DD): ")
+        starttime = input("Enter the start date (YYYY-MM-DD): ")
+        endtime = input("Enter the end date (YYYY-MM-DD): ")
 
-        available_chambers = [chamber for chamber in self.chambers.list_chambers() if self.show_availability(chamber['number'], starttime_str, endtime_str)]
+        available_chambers = [chamber for chamber in self.chambers.list_chambers() if self.show_availability(chamber['number'], starttime, endtime)]
         if not available_chambers:
             print("No available chambers for the specified dates")
         else:
