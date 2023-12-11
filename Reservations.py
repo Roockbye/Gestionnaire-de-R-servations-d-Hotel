@@ -27,12 +27,12 @@ class Reservations:
     - delete_reservation: provides an interface to delete a reservation.
     """
     def __init__(self):
-        self.reservations = []
-        self.reservations = self.info_reservations(action='load')
-        self.chambers = Chambers()
+        self._reservations = []
+        self._reservations = self.info_reservations(action='load')
+        self._chambers = Chambers()
     
     def make_reservations(self, client_id, number,starttime, endtime, payment=False):
-        reservation_id = len(self.reservations)+1
+        reservation_id = len(self._reservations)+1
         starttime = datetime.strptime(starttime, '%Y-%m-%d').date() ## attention ne pas utiliser strftime ici
         endtime = datetime.strptime(endtime, '%Y-%m-%d').date()
         
@@ -47,21 +47,21 @@ class Reservations:
         if not self.show_availability(number, starttime, endtime):
             print("Chamber not available")
             return
-        self.reservations.append(new_reservation)
-        self.info_reservations(action='save', data= self.reservations)
+        self._reservations.append(new_reservation)
+        self.info_reservations(action='save', data= self._reservations)
         print(f"The reservation has been created with the ID: {reservation_id}")      
         
     def save_payment(self, reservation_id):
-        for reservation in self.reservations:
-            if reservation['id']== reservation_id:
-                reservation['payment'] = True
-                self.info_reservations(action='save', data=self.reservations)
-                print(f"Payment not save for {reservation_id}")
-                return
+        reservation = next((r for r in self._reservations if r['id'] == reservation_id), None)
+        if reservation:
+            reservation['payment'] = True
+            self.info_reservations(action='save', data=self._reservations)
+            print(f"Payment saved for {reservation_id}")
+        else:
             print(f"Reservation {reservation_id} not found")
         
     def show_availability(self, number, starttime, endtime):
-        for reservation in self.reservations:
+        for reservation in self._reservations:
             if reservation['number']==number:
                 reservation_start = datetime.strptime(reservation['starttime'], '%Y-%m-%d').date()
                 reservation_end = datetime.strptime(reservation['endtime'], '%Y-%m-%d').date()
@@ -77,7 +77,7 @@ class Reservations:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             
-            reservation = next((r for r in self.reservations if r['id'] == reservation_id), None)
+            reservation = next((r for r in self._reservations if r['id'] == reservation_id), None)
             if reservation:
                 writer.writerow(reservation)
                 print(f"Reservation with the ID {reservation_id} export to {filename}")
@@ -85,10 +85,10 @@ class Reservations:
                 print(f"Reservation with the ID {reservation_id} not found")
                 
     def delete_reservations(self, reservation_id):
-        reservation = next((r for r in self.reservations if r ['id']== reservation_id), None)
+        reservation = next((r for r in self._reservations if r ['id']== reservation_id), None)
         if reservation:
-            self.reservations.remove(reservation)
-            self.info_reservations(action='save', data = self.reservations)
+            self._reservations.remove(reservation)
+            self.info_reservations(action='save', data = self._reservations)
             print(f"Reservation with ID {reservation_id} deleted")
         else:
             print(f"Reservation with ID {reservation_id} not found")
@@ -108,6 +108,15 @@ class Reservations:
         elif action == 'save':
             with open(filename, 'w') as file:
                 json.dump(data, file, indent=2)
+    
+    def display_reservations(self):
+        print("List of reservations:")
+        for reservation in self._reservations:
+            print(reservation)
+            
+    def get_reservations(self):
+        return self._reservations
+                
 
 ## Display Interface(main)
 
@@ -133,18 +142,13 @@ class Reservations:
         starttime = input("Enter the start date (YYYY-MM-DD): ")
         endtime = input("Enter the end date (YYYY-MM-DD): ")
 
-        available_chambers = [chamber for chamber in self.chambers.list_chambers() if self.show_availability(chamber['number'], starttime, endtime)]
+        available_chambers = [chamber for chamber in self._chambers.list_chambers() if self.show_availability(chamber['number'], starttime, endtime)]
         if not available_chambers:
             print("No available chambers for the specified dates")
         else:
             print("Available Chambers:")
             for chamber in available_chambers:
                 print(f"Chamber {chamber['number']}, {chamber['type']}, Price: {chamber['price']}")
-    
-    def display_reservations(self):
-        print("List of reservations:")
-        for reservation in self.reservations:
-            print(reservation)
                 
     def delete_reservation(self):
         reservation_id = int(input("Enter the ID of the reservation to delete: "))

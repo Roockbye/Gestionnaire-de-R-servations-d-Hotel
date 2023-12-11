@@ -26,5 +26,12 @@
     "lastname": "Marmande",
     "birthdate": "2004-05-09",
     "phonenumber": "0645874120"
+  },
+  {
+    "client_id": 5,
+    "firstname": "Lucille",
+    "lastname": "Cenac",
+    "birthdate": "2004-05-02",
+    "phonenumber": "0685471245"
   }
 ]

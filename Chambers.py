@@ -20,8 +20,8 @@ class Chambers:
     - update_chamber: provides an interface to update chamber information.
     """
     def  __init__(self):
-        self.chambers = []
-        self.chambers = self.info_chambers(action='load')
+        self._chambers = []
+        self._chambers = self.info_chambers(action='load')
         
     def add_chambers(self, number, type, price):
         new_chamber = {
@@ -29,26 +29,26 @@ class Chambers:
             'type': type,
             'price': price,
         }
-        self.chambers.append(new_chamber)
-        self.info_chambers(action='save', data=self.chambers)
+        self._chambers.append(new_chamber)
+        self.info_chambers(action='save', data=self._chambers)
         print(f"A new chamber has been created: {number}")
         
     def delete_chambers(self, number):
         number = str(number)
-        for chamber in self.chambers:
+        for chamber in self._chambers:
             if chamber['number']== number: 
-                self.chambers.remove(chamber)
-                self.info_chambers(action='save', data=self.chambers)
+                self._chambers.remove(chamber)
+                self.info_chambers(action='save', data=self._chambers)
                 print(f"The chamber {number} has been deleted")
                 return
         print(f"Chamber {number} not found")
             
     def update_chambers(self, number, update_data):
         number = str(number)
-        for chamber in self.chambers:
+        for chamber in self._chambers:
             if chamber['number'] == number:
                 chamber.update(update_data)
-                self.info_chambers(action='save', data=self.chambers)
+                self.info_chambers(action='save', data=self._chambers)
                 print(f"Chamber {number} updated")
                 return
         print(f"Chamber {number} not found") 
@@ -69,13 +69,13 @@ class Chambers:
                 json.dump(data, file, indent=2)
                 
     def display_chambers(self):
-        for chamber in self.chambers:
+        for chamber in self._chambers:
             print(f"Number: {chamber['number']}, Type: {chamber['type']}, Price per night: {chamber['price']}")
 
     
     def list_chambers(self):
         details_chamber = []
-        for chamber in self.chambers:
+        for chamber in self._chambers:
             details_chamber.append({
                 'number': chamber['number'],
                 'type': chamber['type'],
@@ -83,6 +83,9 @@ class Chambers:
             })
         return details_chamber
     
+    def get_chambers(self):
+        return self._chambers
+        
 ## Display Interface(main)
 
     def add_chamber(self):

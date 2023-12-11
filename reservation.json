@@ -13,6 +13,6 @@
     "number": 3,
     "starttime": "2023-12-14",
     "endtime": "2023-12-16",
-    "payment": false
+    "payment": true
   }
 ]

@@ -20,11 +20,11 @@ class Clients:
     - update_client: Interface method to update a client's information.
     """
     def __init__(self):
-        self.clients = []
-        self.clients = self.info_clients(action='load')
+        self._clients = []
+        self._clients = self.info_clients(action='load')
     
     def add_clients(self, firstname, lastname, birthdate, phonenumber):
-        client_id = len(self.clients) + 1
+        client_id = len(self._clients) + 1
         birthdate = datetime.strptime(birthdate, '%Y-%m-%d').date()
         new_client = {
             'client_id': client_id,
@@ -33,17 +33,17 @@ class Clients:
             'birthdate': birthdate.strftime('%Y-%m-%d'),
             'phonenumber': phonenumber,
         }
-        self.clients.append(new_client)
-        self.info_clients(action='save', data=self.clients)
+        self._clients.append(new_client)
+        self.info_clients(action='save', data=self._clients)
         print(f"A new client has been created: client {client_id}")
         
         
     def delete_clients(self, client_id):
         client_id = int(client_id)
-        for client in self.clients:
+        for client in self._clients:
             if client['client_id'] == client_id:
-                self.clients.remove(client)
-                self.info_clients(action='save', data=self.clients)
+                self._clients.remove(client)
+                self.info_clients(action='save', data=self._clients)
                 print(f"The client {client_id} has been deleted")
                 return
             
@@ -51,12 +51,12 @@ class Clients:
         
     def update_clients(self, client_id, update_data):
         client_id = int(client_id)
-        for client in self.clients:
+        for client in self._clients:
             if client['client_id'] == client_id:
                 for key, value in update_data.items():
                     if value != '':
                         client[key] = value
-                self.info_clients(action='save', data=self.clients)
+                self.info_clients(action='save', data=self._clients)
                 print(f"Data of the client {client_id} updated")
                 return
             
@@ -79,8 +79,11 @@ class Clients:
                 json.dump(data, file, indent=2)
                 
     def display_clients(self):
-        for client in self.clients:
+        for client in self._clients:
             print(client)
+            
+    def get_clients(self):
+        return self._clients
             
 ## Display on the Interface(main)
 

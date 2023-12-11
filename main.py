@@ -12,9 +12,18 @@ class InterfaceUtilisateur:
     reservations (Reservations): An instance of the Reservations class.
     """
     def __init__(self):
-        self.clients = Clients()
-        self.chambers = Chambers()
-        self.reservations = Reservations()
+        self._clients = Clients()
+        self._chambers = Chambers()
+        self._reservations = Reservations()
+    
+    def get_clients(self):
+        return self._clients.get_clients()
+
+    def get_chambers(self):
+        return self._chambers.get_chambers()
+
+    def get_reservations(self):
+        return self._reservations.get_reservations()
         
     def display_banner(self):
         print("---------------------------------")
@@ -60,31 +69,31 @@ class InterfaceUtilisateur:
                 case "0":
                     break
                 case "1":
-                    self.clients.display_clients()
+                    self._clients.display_clients()
                 case "2":
-                    self.chambers.display_chambers()
+                    self._chambers.display_chambers()
                 case "3":
-                    self.reservations.display_reservations()
+                    self._reservations.display_reservations()
                 case "4":
-                    self.clients.add_client()
+                    self._clients.add_client()
                 case "5":
-                    self.clients.update_client()
+                    self._clients.update_client()
                 case "6":
-                    self.clients.delete_client()
+                    self._clients.delete_client()
                 case "7":
-                    self.chambers.add_chamber()
+                    self._chambers.add_chamber()
                 case "8":
-                    self.chambers.update_chamber()
+                    self._chambers.update_chamber()
                 case "9":
-                    self.chambers.delete_chamber()
+                    self._chambers.delete_chamber()
                 case "10":
-                    self.reservations.make_reservation()
+                    self._reservations.make_reservation()
                 case "11":
-                    self.reservations.payment()
+                    self._reservations.payment()
                 case "12":
-                    self.reservations.delete_reservation()
+                    self._reservations.delete_reservation()
                 case "13":
-                    self.reservations.export_reservations()
+                    self._reservations.export_reservations()
                 case _:
                     print("Invalid option. Select a valid option.")
 
@@ -101,7 +110,7 @@ class InterfaceUtilisateur:
                 case "0":
                     break
                 case "1":
-                    self.reservations.show_chambers()
+                    self._reservations.show_chambers()
                 case _:
                     print("Invalid option. Select a valid option.")
 
